@@ -1,24 +1,15 @@
-env:
-  global:
-    - CONAN_REFERENCE: "libtiff/4.0.8"
-    - CONAN_CHANNEL: "stable"
-    - CONAN_UPLOAD: "https://api.bintray.com/conan/zamazan4ik/conan"
-    - CONAN_STABLE_BRANCH_PATTERN: "release/*"
-    - CONAN_UPLOAD_ONLY_WHEN_STABLE: 1 # Will only upload when the branch matches "release/*"
-
 linux: &linux
-  os: linux
-  sudo: required
-  language: python
-  python: "3.6"
-  services:
-    - docker
+   os: linux
+   sudo: required
+   language: python
+   python: "3.6"
+   services:
+     - docker
 osx: &osx
-  os: osx
-  language: generic
-
+   os: osx
+   language: generic
 matrix:
-  include:
+   include:
 
       - <<: *linux
         env: CONAN_GCC_VERSIONS=4.6 CONAN_DOCKER_IMAGE=lasote/conangcc46

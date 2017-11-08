@@ -1,26 +1,25 @@
-import os
-from conans import ConanFile, CMake
-from conans.tools import download, unzip
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from conans import ConanFile, CMake, tools
+
 
 class LibtiffConan(ConanFile):
     name = "libtiff"
-    description = """Library for Tag Image File Format (TIFF), a widely used
-                     format for storing image data"""
+    description = "Library for Tag Image File Format (TIFF)"
     version = "4.0.8"
-    generators = "cmake"
+    url="http://github.com/bincrafters/conan-tiff"
+    license="https://spdx.org/licenses/libtiff.html"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=False"
     requires = "zlib/1.2.11@conan/stable"
+    generators = "cmake"
     exports = ["CMakeLists.txt", "FindTIFF.cmake"]
-    url="http://github.com/ZaMaZaN4iK/conan-tiff"
-    license="http://www.remotesensing.org/libtiff/"
 
     def source(self):
-        zip_name = "tiff-%s.zip" % self.version
-        download("http://download.osgeo.org/libtiff/%s" % zip_name , zip_name)
-        unzip(zip_name)
-        os.unlink(zip_name)
+        zip_name = "tiff-" + self.version + ".zip"
+        tools.get("http://download.osgeo.org/libtiff/" + zip_name)
 
     def build(self):
         cmake = CMake(self)
@@ -34,6 +33,16 @@ class LibtiffConan(ConanFile):
             cmake.definitions["BUILD_SHARED_LIBS"] = "ON"
         cmake.configure(build_dir="build")
         cmake.build(target="install")
+        
+    def package(self):
+        self.copy("*.h", dst="include", src="sources")
+
+        # Copying static and dynamic libs
+        if self.settings.os == "Windows":
+            self.copy(pattern="libjpeg.lib", dst="lib", src="Release", keep_path=False)
+        else:
+            self.copy(pattern="*.so", dst="lib", src="libs", keep_path=False)
+            self.copy(pattern="*.a", dst="lib", src="libs", keep_path=False)
 
     def package_info(self):
         if self.settings.os == "Windows" and self.settings.build_type == "Debug":
