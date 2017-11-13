@@ -27,10 +27,7 @@ class LibtiffConan(ConanFile):
         cmake.definitions["jpeg"] = "OFF"
         if self.settings.os == "Linux":
             cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = "ON"
-        if self.options.shared == False:
-            cmake.definitions["BUILD_SHARED_LIBS"] = "OFF"
-        else:
-            cmake.definitions["BUILD_SHARED_LIBS"] = "ON"
+        cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
         cmake.configure(build_dir="build")
         cmake.build(target="install")
         
