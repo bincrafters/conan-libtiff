@@ -13,7 +13,7 @@ class LibtiffConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=False"
-    requires = "zlib/1.2.11@conan/stable"
+    requires = "zlib/1.2.11@lasote/stable"
     generators = "cmake"
     exports = ["CMakeLists.txt", "FindTIFF.cmake"]
 
