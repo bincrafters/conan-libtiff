@@ -8,8 +8,8 @@ class LibtiffConan(ConanFile):
     name = "libtiff"
     description = "Library for Tag Image File Format (TIFF)"
     version = "4.0.8"
-    url="http://github.com/bincrafters/conan-tiff"
-    license="https://spdx.org/licenses/libtiff.html"
+    url = "http://github.com/bincrafters/conan-tiff"
+    license = "https://spdx.org/licenses/libtiff.html"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=False"
