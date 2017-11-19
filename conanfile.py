@@ -46,3 +46,5 @@ class LibtiffConan(ConanFile):
             self.cpp_info.libs = ["tiffd", "tiffxxd"]
         else:
             self.cpp_info.libs = ["tiff", "tiffxx"]
+        if self.settings.os == "Linux":
+            self.cpp_info.libs.append("m")
