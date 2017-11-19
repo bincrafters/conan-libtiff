@@ -34,13 +34,6 @@ class LibtiffConan(ConanFile):
     def package(self):
         self.copy("*.h", dst="include", src="sources")
 
-        # Copying static and dynamic libs
-        if self.settings.os == "Windows":
-            self.copy(pattern="libjpeg.lib", dst="lib", src="Release", keep_path=False)
-        else:
-            self.copy(pattern="*.so", dst="lib", src="libs", keep_path=False)
-            self.copy(pattern="*.a", dst="lib", src="libs", keep_path=False)
-
     def package_info(self):
         if self.settings.os == "Windows" and self.settings.build_type == "Debug":
             self.cpp_info.libs = ["tiffd", "tiffxxd"]
