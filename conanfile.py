@@ -10,13 +10,14 @@ class LibtiffConan(ConanFile):
     description = "Library for Tag Image File Format (TIFF)"
     version = "4.0.8"
     url = "http://github.com/bincrafters/conan-tiff"
-    license = "https://spdx.org/licenses/libtiff.html"
+    license = "BSD"
+    exports = ["LICENSE.md"]
+    exports_sources = ["CMakeLists.txt", "FindTIFF.cmake"]
+    generators = "cmake"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=False"
     requires = "zlib/1.2.11@conan/stable"
-    generators = "cmake"
-    exports = ["CMakeLists.txt", "FindTIFF.cmake"]
 
     def source(self):
         zip_name = "tiff-" + self.version + ".zip"
