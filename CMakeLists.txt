@@ -1,6 +1,7 @@
-PROJECT(conanlibtiff)
-cmake_minimum_required(VERSION 2.8)
-include(conanbuildinfo.cmake)
-CONAN_BASIC_SETUP()
-add_subdirectory(tiff-4.0.8)
-install(FILES FindTIFF.cmake DESTINATION .)
+cmake_minimum_required(VERSION 3.10)
+project(cmake_wrapper)
+
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
+
+include("CMakeListsOriginal.txt")

@@ -3,6 +3,7 @@
 
 from conans import ConanFile, CMake, tools
 import os
+import shutil
 
 
 class LibtiffConan(ConanFile):
@@ -17,11 +18,17 @@ class LibtiffConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=False"
-    requires = "zlib/1.2.11@conan/stable"
+    requires = "zlib/[~=1.2]@conan/stable"
+
+    source_subfolder = "source_subfolder"
 
     def source(self):
-        zip_name = "tiff-" + self.version + ".zip"
-        tools.get("http://download.osgeo.org/libtiff/" + zip_name)
+        tools.get("http://download.osgeo.org/libtiff/tiff-{0}.zip".format(self.version))
+        os.rename('tiff-' + self.version, self.source_subfolder)
+        os.rename(os.path.join(self.source_subfolder, "CMakeLists.txt"),
+                  os.path.join(self.source_subfolder, "CMakeListsOriginal.txt"))
+        shutil.copy("CMakeLists.txt",
+                    os.path.join(self.source_subfolder, "CMakeLists.txt"))
 
     def build(self):
         cmake = CMake(self)
@@ -29,18 +36,21 @@ class LibtiffConan(ConanFile):
         cmake.definitions["jpeg"] = False
         if self.options.shared and self.settings.compiler == "Visual Studio":
             # https://github.com/Microsoft/vcpkg/blob/master/ports/tiff/fix-cxx-shared-libs.patch
-            tools.replace_in_file(os.path.join('tiff-4.0.8', 'libtiff', 'CMakeLists.txt'),
+            tools.replace_in_file(os.path.join(self.source_subfolder, 'libtiff', 'CMakeLists.txt'),
                                   r'set_target_properties(tiffxx PROPERTIES SOVERSION ${SO_COMPATVERSION})',
                                   r'set_target_properties(tiffxx PROPERTIES SOVERSION ${SO_COMPATVERSION} '
                                   r'WINDOWS_EXPORT_ALL_SYMBOLS ON)')
         if self.settings.os == "Linux":
             cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = "ON"
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
-        cmake.configure(build_dir="build")
-        cmake.build(target="install")
+        cmake.configure(source_folder=self.source_subfolder)
+        cmake.build()
+        cmake.install()
 
     def package(self):
-        self.copy("*.h", dst="include", src="sources")
+        self.copy("FindTIFF.cmake", ".", ".")
+        shutil.rmtree(os.path.join(self.package_folder, 'bin'), ignore_errors=True)
+        shutil.rmtree(os.path.join(self.package_folder, 'share'), ignore_errors=True)
 
     def package_info(self):
         if self.settings.os == "Windows" and self.settings.build_type == "Debug":
