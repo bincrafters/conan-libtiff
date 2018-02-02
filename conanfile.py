@@ -49,7 +49,6 @@ class LibtiffConan(ConanFile):
 
     def package(self):
         self.copy("FindTIFF.cmake", ".", ".")
-        shutil.rmtree(os.path.join(self.package_folder, 'bin'), ignore_errors=True)
         shutil.rmtree(os.path.join(self.package_folder, 'share'), ignore_errors=True)
 
     def package_info(self):
