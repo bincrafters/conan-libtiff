@@ -59,9 +59,11 @@ class LibtiffConan(ConanFile):
         shutil.rmtree(os.path.join(self.package_folder, 'share'), ignore_errors=True)
 
     def package_info(self):
+        self.cpp_info.libs = ["tiff", "tiffxx"]
         if self.settings.os == "Windows" and self.settings.build_type == "Debug":
-            self.cpp_info.libs = ["tiffd", "tiffxxd"]
-        else:
-            self.cpp_info.libs = ["tiff", "tiffxx"]
+            self.cpp_info.libs = [lib+'d' for lib in self.cpp_info.libs]
+        if self.options.shared and self.settings.os == "Windows" and self.settings.compiler != 'Visual Studio':
+            self.cpp_info.libs = [lib+'.dll' for lib in self.cpp_info.libs]
         if self.settings.os == "Linux":
             self.cpp_info.libs.append("m")
+        self.output.warn(repr(self.cpp_info.libs))
