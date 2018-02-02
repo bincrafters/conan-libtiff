@@ -40,6 +40,13 @@ class LibtiffConan(ConanFile):
                                   r'set_target_properties(tiffxx PROPERTIES SOVERSION ${SO_COMPATVERSION})',
                                   r'set_target_properties(tiffxx PROPERTIES SOVERSION ${SO_COMPATVERSION} '
                                   r'WINDOWS_EXPORT_ALL_SYMBOLS ON)')
+
+        if self.settings.os == "Windows" and self.settings.compiler != "Visual Studio":
+            # only one occurence must be patched
+            tools.replace_in_file(os.path.join(self.source_subfolder, "CMakeListsOriginal.txt"),
+                                  "if (UNIX)",
+                                  "if (UNIX OR MINGW)")
+
         if self.settings.os == "Linux":
             cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = "ON"
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
