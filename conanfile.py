@@ -60,7 +60,8 @@ class LibtiffConan(ConanFile):
 
     def package(self):
         self.copy("FindTIFF.cmake", ".", ".")
-        shutil.rmtree(os.path.join(self.package_folder, 'share'), ignore_errors=True)
+        shutil.rmtree(os.path.join(self.package_folder, 'share', 'man'), ignore_errors=True)
+        shutil.rmtree(os.path.join(self.package_folder, 'share', 'doc'), ignore_errors=True)
 
     def package_info(self):
         self.cpp_info.libs = ["tiff", "tiffxx"]
@@ -70,4 +71,3 @@ class LibtiffConan(ConanFile):
             self.cpp_info.libs = [lib+'.dll' for lib in self.cpp_info.libs]
         if self.settings.os == "Linux":
             self.cpp_info.libs.append("m")
-        self.output.warn(repr(self.cpp_info.libs))
