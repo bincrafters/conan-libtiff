@@ -13,7 +13,7 @@ class LibtiffConan(ConanFile):
     url = "http://github.com/bincrafters/conan-tiff"
     license = "BSD"
     exports = ["LICENSE.md"]
-    exports_sources = ["CMakeLists.txt", "FindTIFF.cmake"]
+    exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
@@ -59,7 +59,6 @@ class LibtiffConan(ConanFile):
         cmake.install()
 
     def package(self):
-        self.copy("FindTIFF.cmake", ".", ".")
         shutil.rmtree(os.path.join(self.package_folder, 'share', 'man'), ignore_errors=True)
         shutil.rmtree(os.path.join(self.package_folder, 'share', 'doc'), ignore_errors=True)
 
