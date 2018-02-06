@@ -16,11 +16,15 @@ class LibtiffConan(ConanFile):
     exports_sources = ["CMakeLists.txt", "FindTIFF.cmake"]
     generators = "cmake"
     settings = "os", "compiler", "build_type", "arch"
-    options = {"shared": [True, False]}
-    default_options = "shared=False"
+    options = {"shared": [True, False], "fPIC": [True, False]}
+    default_options = "shared=False", "fPIC=True"
     requires = "zlib/[~=1.2]@conan/stable"
 
     source_subfolder = "source_subfolder"
+
+    def config_options(self):
+        if self.settings.os == "Windows":
+            self.options.remove("fPIC")
 
     def source(self):
         tools.get("http://download.osgeo.org/libtiff/tiff-{0}.zip".format(self.version))
@@ -47,8 +51,8 @@ class LibtiffConan(ConanFile):
                                   "if (UNIX)",
                                   "if (UNIX OR MINGW)")
 
-        if self.settings.os == "Linux":
-            cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = "ON"
+        if self.settings.os != "Windows":
+            cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = self.options.fPIC
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
         cmake.configure(source_folder=self.source_subfolder)
         cmake.build()
