@@ -18,7 +18,7 @@ class LibtiffConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = "shared=False", "fPIC=True"
-    requires = "zlib/[~=1.2]@conan/stable"
+    requires = "zlib/1.2.11@conan/stable"
 
     source_subfolder = "source_subfolder"
 
