@@ -46,8 +46,8 @@ class LibtiffConan(ConanFile):
                                   r'set_target_properties(tiffxx PROPERTIES SOVERSION ${SO_COMPATVERSION} '
                                   r'WINDOWS_EXPORT_ALL_SYMBOLS ON)')
 
-        if self.settings.os == "Windows" and self.settings.compiler != "Visual Studio":
-            # only one occurence must be patched
+        if self.settings.os == "Windows" and self.settings.compiler != "Visual Studio" and self.version == '4.0.8':
+            # only one occurence must be patched. fixed in 4.0.9
             tools.replace_in_file(os.path.join(self.source_subfolder, "CMakeListsOriginal.txt"),
                                   "if (UNIX)",
                                   "if (UNIX OR MINGW)")
