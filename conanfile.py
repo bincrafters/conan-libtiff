@@ -64,6 +64,16 @@ class LibtiffConan(ConanFile):
         shutil.rmtree(os.path.join(self.package_folder, 'share', 'man'), ignore_errors=True)
         shutil.rmtree(os.path.join(self.package_folder, 'share', 'doc'), ignore_errors=True)
 
+        # remove binaries
+        for bin_program in ['fax2ps', 'fax2tiff', 'pal2rgb', 'ppm2tiff', 'raw2tiff', 'tiff2bw', 'tiff2pdf',
+                            'tiff2ps', 'tiff2rgba', 'tiffcmp', 'tiffcp', 'tiffcrop', 'tiffdither', 'tiffdump',
+                            'tiffgt', 'tiffinfo', 'tiffmedian', 'tiffset', 'tiffsplit']:
+            for ext in ['', '.exe']:
+                try:
+                    os.remove(os.path.join(self.package_folder, 'bin', bin_program+ext))
+                except:
+                    pass
+
     def package_info(self):
         self.cpp_info.libs = ["tiff", "tiffxx"]
         if self.settings.os == "Windows" and self.settings.build_type == "Debug" and self.settings.compiler == 'Visual Studio':
