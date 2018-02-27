@@ -11,7 +11,8 @@ class LibtiffConan(ConanFile):
     description = "Library for Tag Image File Format (TIFF)"
     version = "4.0.8"
     url = "http://github.com/bincrafters/conan-tiff"
-    license = "BSD"
+    license = "MIT"
+    homepage = "http://www.simplesystems.org/libtiff"
     exports = ["LICENSE.md"]
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
@@ -59,6 +60,7 @@ class LibtiffConan(ConanFile):
         cmake.install()
 
     def package(self):
+        self.copy("COPYRIGHT", src=self.source_subfolder, dst="licenses", ignore_case=True, keep_path=False)
         shutil.rmtree(os.path.join(self.package_folder, 'share', 'man'), ignore_errors=True)
         shutil.rmtree(os.path.join(self.package_folder, 'share', 'doc'), ignore_errors=True)
 
