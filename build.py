@@ -7,7 +7,7 @@ import platform
 
 if __name__ == "__main__":
 
-    builder = build_template_default.get_builder()
+    builder = build_template_default.get_builder(pure_c=True)
 
     items = []
     for item in builder.items:
