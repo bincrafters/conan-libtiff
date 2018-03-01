@@ -26,6 +26,7 @@ class LibtiffConan(ConanFile):
     def config_options(self):
         if self.settings.os == "Windows":
             self.options.remove("fPIC")
+        del self.settings.compiler.libcxx
 
     def source(self):
         tools.get("http://download.osgeo.org/libtiff/tiff-{0}.zip".format(self.version))
