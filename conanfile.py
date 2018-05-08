@@ -53,8 +53,6 @@ class LibtiffConan(ConanFile):
                                   "if (UNIX)",
                                   "if (UNIX OR MINGW)")
 
-        if self.settings.os != "Windows":
-            cmake.definitions["CMAKE_POSITION_INDEPENDENT_CODE"] = self.options.fPIC
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
         cmake.configure(source_folder=self.source_subfolder)
         cmake.build()
