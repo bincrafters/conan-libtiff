@@ -38,6 +38,11 @@ class LibtiffConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
+
+        cmake.definitions['CMAKE_INSTALL_LIBDIR'] = 'lib'
+        cmake.definitions['CMAKE_INSTALL_BINDIR'] = 'bin'
+        cmake.definitions['CMAKE_INSTALL_INCLUDEDIR'] = 'include'
+
         cmake.definitions["lzma"] = False
         cmake.definitions["jpeg"] = False
         if self.options.shared and self.settings.compiler == "Visual Studio":
