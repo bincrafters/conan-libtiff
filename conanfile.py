@@ -11,6 +11,7 @@ class LibtiffConan(ConanFile):
     description = "Library for Tag Image File Format (TIFF)"
     version = "4.0.9"
     url = "http://github.com/bincrafters/conan-tiff"
+    author = "Bincrafters <bincrafters@gmail.com>"
     license = "MIT"
     homepage = "http://www.simplesystems.org/libtiff"
     exports = ["LICENSE.md"]
