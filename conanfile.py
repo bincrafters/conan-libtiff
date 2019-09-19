@@ -64,6 +64,10 @@ class LibtiffConan(ConanFile):
                                       "if (UNIX)",
                                       "if (UNIX OR MINGW)")
 
+        tools.replace_in_file(os.path.join(self._source_subfolder, "CMakeListsOriginal.txt"),
+            "add_subdirectory(tools)\nadd_subdirectory(test)\nadd_subdirectory(contrib)\nadd_subdirectory(build)\n"
+            "add_subdirectory(man)\nadd_subdirectory(html)", "")
+
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
         cmake.configure(source_folder=self._source_subfolder)
         cmake.build()
@@ -71,18 +75,6 @@ class LibtiffConan(ConanFile):
 
     def package(self):
         self.copy("COPYRIGHT", src=self._source_subfolder, dst="licenses", ignore_case=True, keep_path=False)
-        shutil.rmtree(os.path.join(self.package_folder, 'share', 'man'), ignore_errors=True)
-        shutil.rmtree(os.path.join(self.package_folder, 'share', 'doc'), ignore_errors=True)
-
-        # remove binaries
-        for bin_program in ['fax2ps', 'fax2tiff', 'pal2rgb', 'ppm2tiff', 'raw2tiff', 'tiff2bw', 'tiff2pdf',
-                            'tiff2ps', 'tiff2rgba', 'tiffcmp', 'tiffcp', 'tiffcrop', 'tiffdither', 'tiffdump',
-                            'tiffgt', 'tiffinfo', 'tiffmedian', 'tiffset', 'tiffsplit']:
-            for ext in ['', '.exe']:
-                try:
-                    os.remove(os.path.join(self.package_folder, 'bin', bin_program+ext))
-                except:
-                    pass
 
     def package_info(self):
         self.cpp_info.libs = ["tiff", "tiffxx"]
